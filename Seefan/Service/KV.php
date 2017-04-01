@@ -1,6 +1,6 @@
 <?php
-
-class kv extends service
+namespace Seefan\Service;
+class KV extends Service
 {
     public function __construct($base_url, $http)
     {

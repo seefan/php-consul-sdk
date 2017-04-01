@@ -1,6 +1,8 @@
 <?php
+namespace Seefan\Service;
+use Seefan\Http;
 
-class service
+class Service
 {
     /**
      * @var Http

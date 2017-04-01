@@ -1,5 +1,5 @@
 <?php
-
+namespace Seefan;
 class Http
 {
     /**

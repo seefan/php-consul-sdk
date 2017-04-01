@@ -1,6 +1,6 @@
 <?php
-
-class agent extends service
+namespace Seefan\Service;
+class Agent extends Service
 {
     public function __construct($base_url, $http)
     {

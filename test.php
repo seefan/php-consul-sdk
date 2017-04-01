@@ -5,8 +5,8 @@
  * Date: 2017/4/1
  * Time: 10:22
  */
-require 'ConsulClient.php';
-$cc = new ConsulClient(['host' => '10.20.28.51:8500']);
+require 'Seefan\ConsulClient.php';
+$cc = new Seefan\ConsulClient(['host' => '10.20.28.51:8500']);
 //var_dump( $cc->catalog->services());
 //var_dump($cc->kv->get('service/0000'));
 //var_dump($cc->agent->self());
@@ -25,7 +25,7 @@ $str = '{
 }';
 //$param = json_decode($str, true);
 //var_dump($cc->agent->service('register', $param));
-//$cc->agent->service('deregister','redis1');
+//$rsp=$cc->agent->service('deregister','redis1');
 //$rsp=$cc->catalog->service('XE');
 
 $json_str = '{
@@ -59,6 +59,13 @@ $json_str = '{
                    "ServiceID": "redis1"
                  }
                }';
+//$json = json_decode($json_str, true);
+//$rsp = $cc->catalog->register($json);
+
+$json_str='{
+  "Datacenter": "dc1",
+  "Node": "foobar"
+}';
 $json = json_decode($json_str, true);
-$rsp = $cc->catalog->register($json);
+$rsp = $cc->catalog->deregister($json);
 var_dump($rsp);

@@ -1,6 +1,6 @@
 <?php
-
-class catalog extends service
+namespace Seefan\Service;
+class Catalog extends Service
 {
     public function __construct($base_url, $http)
     {

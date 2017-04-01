@@ -1,7 +1,6 @@
 <?php
+namespace Seefan;
 
-require __DIR__.'/Http.php';
-require __DIR__.'/service/service.php';
 class ConsulClient
 {
     private $http;
@@ -27,9 +26,17 @@ class ConsulClient
     public function get($name)
     {
         if (empty($this->service[$name])) {
-            require __DIR__ . '/service/' . $name . '.php';
-            $this->service[$name] = new $name($this->base_url, $this->http);
+            $class_name = "Seefan\\Service\\$name";
+            $this->service[$name] = new $class_name($this->base_url, $this->http);
         }
         return $this->service[$name];
     }
+
 }
+spl_autoload_register(function ($class) {
+    $file = $class . '.php';
+    if (is_file($file)) {
+        require($file);
+    }
+}
+);
