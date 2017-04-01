@@ -25,6 +25,7 @@ class ConsulClient
 
     public function get($name)
     {
+        $name = ucwords($name);
         if (empty($this->service[$name])) {
             $class_name = "Seefan\\Service\\$name";
             $this->service[$name] = new $class_name($this->base_url, $this->http);
@@ -33,6 +34,7 @@ class ConsulClient
     }
 
 }
+
 spl_autoload_register(function ($class) {
     $file = $class . '.php';
     if (is_file($file)) {
