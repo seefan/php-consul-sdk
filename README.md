@@ -2,7 +2,8 @@
 
 简单好用的consul的php客户端，并且因为是php的客户端，所以也不准备支持consul的所有功能，只支持简单的查询功能，不支持session和watch等长连接的功能。
 
-##使用方法
+## 使用方法
+
 #### 仔细的看consul
 使用sdk需要你仔细的了解consul的http的API，因为php-consul-sdk是基于它实现的。
 
