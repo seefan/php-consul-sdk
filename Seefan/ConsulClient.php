@@ -25,7 +25,7 @@ class ConsulClient
 
     public function get($name)
     {
-        $name = ucwords($name);
+        $name = ucfirst($name);
         if (empty($this->service[$name])) {
             $class_name = "Seefan\\Service\\$name";
             $this->service[$name] = new $class_name($this->base_url, $this->http);
