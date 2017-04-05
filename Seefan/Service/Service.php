@@ -11,7 +11,7 @@ class Service
     protected $base_url = '';
     public $name = 'agent';
 
-    public function response($str)
+    protected function response($str)
     {
         if (empty($str)) {
             return '';

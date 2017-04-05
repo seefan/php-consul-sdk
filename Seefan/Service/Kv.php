@@ -8,13 +8,12 @@ class KV extends Service
         $this->name = 'kv';
     }
 
-    public function get($key)
-    {
-        $url = $this->name . '/' . $key;
-        $resp = $this->http->request($this->base_url . $url);
-        return $this->response($resp);
-    }
-
+    /**
+     * 删除指定键值
+     * @param string $key
+     *
+     * @return bool 是否删除成功
+     */
     public function delete($key)
     {
         $url = $this->name . '/' . $key;
@@ -22,13 +21,12 @@ class KV extends Service
         return $resp == 'true';
     }
 
-    public function set($key, $value)
-    {
-        $url = $this->name . '/' . $key;
-        $resp = $this->http->request($this->base_url . $url, $value, 'PUT');
-        return $resp == 'true';
-    }
-
+    /**
+     * 返回指定键下的键名列表，如果指定键下还有子级的话
+     * @param string $key
+     *
+     * @return mixed|string
+     */
     public function keys($key = '')
     {
         $url = $this->name . '/' . $key . '?keys';
@@ -36,7 +34,7 @@ class KV extends Service
         return parent::response($resp);
     }
 
-    public function response($str)
+    protected function response($str)
     {
         if (!empty($str)) {
             $json = json_decode($str, true);
