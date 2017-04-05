@@ -1,6 +1,8 @@
 <?php
 namespace Seefan;
 
+use Seefan\Service\Service;
+
 class ConsulClient
 {
     private $http;
@@ -18,11 +20,25 @@ class ConsulClient
         }
     }
 
+    /**
+     * 用魔术属性获取服务
+     *
+     * @param string $name 服务名
+     *
+     * @return Service 服务
+     */
     public function __get($name)
     {
         return $this->get($name);
     }
 
+    /**
+     * 获取服务
+     *
+     * @param string $name 服务名
+     *
+     * @return Service 服务
+     */
     public function get($name)
     {
         $name = ucfirst($name);
@@ -35,6 +51,9 @@ class ConsulClient
 
 }
 
+/**
+ * 自动注册服务类
+ */
 spl_autoload_register(function ($class) {
     $file = $class . '.php';
     if (is_file($file)) {

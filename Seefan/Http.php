@@ -18,6 +18,16 @@ class Http
      */
     public $query = array();
 
+    /**
+     * http的语法
+     *
+     * @param    string $url 地址
+     * @param string    $param 参数
+     * @param string    $method 请求类型
+     * @param array     $header 自定义头
+     *
+     * @return string
+     */
     public function request($url, $param = '', $method = 'GET', $header = array())
     {
         $url = 'http://' . $url;
