@@ -16,7 +16,7 @@
     $cc = new ConsulClient(['host' => '10.20.28.51:8500']);
 调用API
 
-consul支持的服务中，php-consul-sdk只支持了catalog、kv、agent几个。
+consul支持的服务中，php-consul-sdk只支持了catalog、kv、agent、health几个。
 
 kv服务因为特殊性单独实现了一些方法，请参见API。
    
