@@ -1,5 +1,6 @@
 <?php
 namespace Seefan\Service;
+
 use Seefan\Http;
 
 class Service
@@ -11,8 +12,11 @@ class Service
     protected $base_url = '';
     public $name = 'agent';
 
-    protected function response($str)
+    public function response($str)
     {
+        if ($str === false) {
+            return false;
+        }
         if (empty($str)) {
             return '';
         }
