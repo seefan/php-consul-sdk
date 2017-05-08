@@ -8,44 +8,45 @@ class KV extends Service
         $this->name = 'kv';
     }
 
-    public function get($key)
+    public function get($key, array $param = array())
     {
         $url = $this->name . '/' . $key;
-        $resp = $this->http->request($this->base_url . $url);
+        $resp = $this->http->request($this->base_url . $url, $param);
         return $this->response($resp);
     }
 
-    public function delete($key)
+    public function delete($key, array $param = array())
     {
         $url = $this->name . '/' . $key;
-        $resp = $this->http->request($this->base_url . $url, '', 'DELETE');
+        $resp = $this->http->request($this->base_url . $url, $param, 'DELETE');
         return $resp == 'true';
     }
 
     public function set($key, $value)
     {
         $url = $this->name . '/' . $key;
+        if (is_array($value) || is_object($value)) {
+            $value = json_encode($value);
+        }
         $resp = $this->http->request($this->base_url . $url, $value, 'PUT');
         return $resp == 'true';
-    }
-
-    public function keys($key = '')
-    {
-        $url = $this->name . '/' . $key . '?keys';
-        $resp = $this->http->request($this->base_url . $url);
-        return parent::response($resp);
     }
 
     public function response($str)
     {
         $json = parent::response($str);
         if (is_array($json)) {
-            if (count($json) > 0) {
+            if (count($json) == 1) {
                 return base64_decode($json[0]['Value']);
+            } else {
+                $re = array();
+                foreach ($json as $v) {
+                    $re[$v['Key']] = base64_decode($v['Value']);
+                }
+                return $re;
             }
         } else {
             return $json;
         }
-        return false;
     }
 }

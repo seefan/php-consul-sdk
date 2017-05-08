@@ -6,7 +6,7 @@
  * Time: 10:22
  */
 require 'Seefan\ConsulClient.php';
-$cc = new Seefan\ConsulClient(['host' => '192.168.56.101:8500']);
+$cc = new Seefan\ConsulClient(['host' => '10.20.28.51:8500']);
 //var_dump( $cc->catalog->services());
 //var_dump($cc->kv->get('service/0000'));
 //var_dump($cc->agent->self());
@@ -30,9 +30,9 @@ $str = '{
   }
 }';
 
-$rsp=$cc->agent->service('deregister','redis1');
-$param = json_decode($str, true);
-$rsp = $cc->agent->service('register', $param);
+//$rsp=$cc->agent->service('deregister','redis1');
+//$param = json_decode($str, true);
+//$rsp = $cc->agent->service('register', $param);
 //$rsp=$cc->catalog->service('XE');,
 
 //$json_str = '{
@@ -77,4 +77,6 @@ $rsp = $cc->agent->service('register', $param);
 //$rsp = $cc->catalog->deregister($json);
 
 //$rsp=$cc->agent->checks();
+$param['recurse'] = true;
+$rsp = $cc->kv->get('config', $param);
 var_dump($rsp);

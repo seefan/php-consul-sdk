@@ -31,10 +31,15 @@ class Http
     public function request($url, $param = '', $method = 'GET', $header = array())
     {
         $url = 'http://' . $url;
+        $get = $this->query;
+        if (strcasecmp($method, 'get') === 0 && is_array($param)) {
+            $get = array_merge($get, $param);
+            $param = '';
+        }
         if (strpos($url, '?') === false) {
-            $url .= '?' . http_build_query($this->query);
+            $url .= '?' . http_build_query($get);
         } else {
-            $url .= '&' . http_build_query($this->query);
+            $url .= '&' . http_build_query($get);
         }
         if (is_array($param)) {
             $param = http_build_query($param);
