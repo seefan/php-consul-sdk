@@ -30,10 +30,10 @@ $str = '{
   }
 }';
 
-$rsp=$cc->agent->service('deregister','redis1');
+//$rsp=$cc->agent->service('deregister','redis1');
 //$param = json_decode($str, true);
 //$rsp = $cc->agent->service('register', $param);
-//$rsp=$cc->catalog->service('XE');
+$rsp=$cc->catalog->header('service','XE');
 
 //$json_str = '{
 //                 "Datacenter": "dc1",
@@ -79,7 +79,7 @@ $rsp=$cc->agent->service('deregister','redis1');
 //$rsp=$cc->agent->checks();
 //$param['recurse'] = true;
 //$rsp = $cc->kv->get('config', $param);
-//var_dump($rsp);
+var_dump($rsp);
 //$http = new Seefan\Http();
 //$r=$http->header('10.20.28.51:8500/v1/kv/config', ['recurse' => true]);
 //print_r($r);

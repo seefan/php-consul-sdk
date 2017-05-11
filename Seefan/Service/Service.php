@@ -29,6 +29,26 @@ class Service
         $this->http = $http;
     }
 
+    public function header()
+    {
+        $func_args = func_get_args();
+        if (count($func_args) == 0) {
+            return false;
+        }
+        $method_name = $func_args[0];
+        $param = array();
+        $url = $this->name . '/' . $method_name;
+        for ($i = 1; $i < count($func_args); $i++) {
+            if (is_array($func_args[$i])) {
+                $param = array_merge($param, $func_args[$i]);
+            } else {
+                $url .= '/' . $func_args[$i];
+            }
+        }
+        $resp = $this->http->header($this->base_url . $url, $param);
+        return $resp;
+    }
+
     public function __call($method_name, $args)
     {
         $url = $this->name . '/' . $method_name;
