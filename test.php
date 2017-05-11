@@ -11,7 +11,7 @@ $cc = new Seefan\ConsulClient(['host' => '10.20.28.51:8500']);
 //var_dump($cc->kv->get('service/0000'));
 //var_dump($cc->agent->self());
 //echo $cc->kv->set('test/test1', 'zng');
-//$cc->kv->delete('test/test1');
+$cc->kv->delete('test/test1');
 $str = '{
   "ID": "redis1",
   "Name": "scene",
@@ -30,10 +30,10 @@ $str = '{
   }
 }';
 
-//$rsp=$cc->agent->service('deregister','redis1');
+$rsp=$cc->agent->service('deregister','redis1');
 //$param = json_decode($str, true);
 //$rsp = $cc->agent->service('register', $param);
-//$rsp=$cc->catalog->service('XE');,
+//$rsp=$cc->catalog->service('XE');
 
 //$json_str = '{
 //                 "Datacenter": "dc1",
@@ -77,6 +77,9 @@ $str = '{
 //$rsp = $cc->catalog->deregister($json);
 
 //$rsp=$cc->agent->checks();
-$param['recurse'] = true;
-$rsp = $cc->kv->get('config', $param);
-var_dump($rsp);
+//$param['recurse'] = true;
+//$rsp = $cc->kv->get('config', $param);
+//var_dump($rsp);
+//$http = new Seefan\Http();
+//$r=$http->header('10.20.28.51:8500/v1/kv/config', ['recurse' => true]);
+//print_r($r);

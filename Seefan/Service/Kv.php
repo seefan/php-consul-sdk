@@ -22,13 +22,14 @@ class KV extends Service
         return $resp == 'true';
     }
 
-    public function set($key, $value)
+    public function set($key, $value, array $param = array())
     {
         $url = $this->name . '/' . $key;
         if (is_array($value) || is_object($value)) {
             $value = json_encode($value);
         }
-        $resp = $this->http->request($this->base_url . $url, $value, 'PUT');
+        $param['__body']=$value;
+        $resp = $this->http->request($this->base_url . $url, $param, 'PUT');
         return $resp == 'true';
     }
 

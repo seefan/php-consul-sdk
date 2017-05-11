@@ -46,7 +46,7 @@ class Service
             if (empty($param)) {
                 $resp = $this->http->request($this->base_url . $url);
             } else {
-                $resp = $this->http->request($this->base_url . $url, json_encode($param), 'PUT');
+                $resp = $this->http->request($this->base_url . $url, array('__body' => json_encode($param)), 'PUT');
             }
         }
         return $this->response($resp);

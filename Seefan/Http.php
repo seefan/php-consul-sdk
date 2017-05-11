@@ -17,6 +17,7 @@ class Http
      * @var array 公用的URL参数
      */
     public $query = array();
+    public $http_prefix = 'http://';
 
     /**
      * http的语法
@@ -28,34 +29,103 @@ class Http
      *
      * @return string
      */
-    public function request($url, $param = '', $method = 'GET', $header = array())
+    public function request($url, array $param = array(), $method = 'GET', $header = array())
     {
-        $url = 'http://' . $url;
-        $get = $this->query;
-        if (strcasecmp($method, 'get') === 0 && is_array($param)) {
-            $get = array_merge($get, $param);
-            $param = '';
+        $query = array();
+        $header = array_merge($header, $this->headers);
+        $body = '';
+        if (!empty($param['__body'])) {
+            $body = $param['__body'];
+            unset($param['__body']);
         }
-        if (strpos($url, '?') === false) {
-            $url .= '?' . http_build_query($get);
+        if (strcasecmp($method, 'get') === 0) {
+            $query = array_merge($this->query, $param);
         } else {
-            $url .= '&' . http_build_query($get);
-        }
-        if (is_array($param)) {
-            $param = http_build_query($param);
-        }
-        $http['method'] = $method;
-        $http['header'] = '';
-        $header['Content-Length'] = strlen($param);
-        $header = array_replace($this->headers, $header);
-        foreach ($header as $k => $v) {
-            if (!empty($v)) {
-                $http['header'] .= $k . ':' . $v . "\r\n";
+            if (empty($body)) {
+                $body = http_build_query($param);
+                $query = array_merge($this->query);
+            } else {
+                $query = array_merge($this->query, $param);
             }
         }
-        $http['content'] = $param;
-        $opts = array('http' => $http);
-        $context = stream_context_create($opts);
-        return @file_get_contents($url, false, $context);
+        if (strpos($url, '?') === false) {
+            $url .= '?' . http_build_query($query);
+        } else {
+            $url .= '&' . http_build_query($query);
+        }
+
+        $ch = curl_init();
+        if ($this->http_prefix == 'https://') {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        curl_setopt($ch, CURLOPT_URL, $this->http_prefix . $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method); //设置请求方式
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        $content = curl_exec($ch);
+        $status = curl_errno($ch);
+        if ($status === 0) {
+            return $content;
+        } else {
+            return false;
+        }
+    }
+
+    public function header($url, array $param = array(), $method = 'GET', $header = array())
+    {
+        $query = array();
+        $header = array_merge($header, $this->headers);
+        $body = '';
+        if (!empty($param['__body'])) {
+            $body = $param['__body'];
+            unset($param['__body']);
+        }
+        if (strcasecmp($method, 'get') === 0) {
+            $query = array_merge($this->query, $param);
+        } else {
+            if (empty($body)) {
+                $body = http_build_query($param);
+                $query = array_merge($this->query);
+            } else {
+                $query = array_merge($this->query, $param);
+            }
+        }
+        if (strpos($url, '?') === false) {
+            $url .= '?' . http_build_query($query);
+        } else {
+            $url .= '&' . http_build_query($query);
+        }
+
+        $ch = curl_init();
+        if ($this->http_prefix == 'https://') {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        }
+        curl_setopt($ch, CURLOPT_URL, $this->http_prefix . $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method); //设置请求方式
+        curl_setopt($ch, CURLOPT_HEADER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        $content = curl_exec($ch);
+        $status = curl_errno($ch);
+        curl_close($ch);
+        $header = array();
+        if ($status === 0) {
+            if (($index = strpos($content, "\r\n\r\n")) !== false) {
+                $header_body = substr($content, 0, $index);
+                $header_body = explode("\r\n", $header_body);
+                foreach ($header_body as $r) {
+                    $index = strpos($r, ':');
+                    if ($index !== false) {
+                        $header[trim(substr($r, 0, $index))] = trim(substr($r, $index + 1));
+                    }
+                }
+            }
+        }
+        return $header;
     }
 }
