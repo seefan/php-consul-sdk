@@ -33,8 +33,8 @@ $str = '{
 //$rsp=$cc->agent->service('deregister','redis1');
 //$param = json_decode($str, true);
 //$rsp = $cc->agent->service('register', $param);
-$rsp=$cc->catalog->header('service','XE');
-
+//$rsp=$cc->catalog->header('service','XE');
+$rsp = $cc->catalog->service('XE', ['tag' => '0000']);
 //$json_str = '{
 //                 "Datacenter": "dc1",
 //                 "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",

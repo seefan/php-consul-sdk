@@ -63,8 +63,27 @@ class Service
                     $url .= '/' . $arg;
                 }
             }
+            $resp = $this->http->request($this->base_url . $url, $param);
+        }
+        return $this->response($resp);
+    }
+
+    public function put($method_name, $args)
+    {
+        $url = $this->name . '/' . $method_name;
+        if (empty($args)) {
+            $resp = $this->http->request($this->base_url . $url);
+        } else {
+            $param = array();
+            foreach ($args as $arg) {
+                if (is_array($arg)) {
+                    $param = array_merge($param, $arg);
+                } else {
+                    $url .= '/' . $arg;
+                }
+            }
             if (empty($param)) {
-                $resp = $this->http->request($this->base_url . $url);
+                $resp = $this->http->request($this->base_url . $url, '', 'PUT');
             } else {
                 $resp = $this->http->request($this->base_url . $url, array('__body' => json_encode($param)), 'PUT');
             }
