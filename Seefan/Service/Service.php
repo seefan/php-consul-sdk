@@ -68,9 +68,10 @@ class Service
         return $this->response($resp);
     }
 
-    public function put($method_name, $args)
+    public function put()
     {
-        $url = $this->name . '/' . $method_name;
+        $args=func_get_args();
+        $url = $this->name ;
         if (empty($args)) {
             $resp = $this->http->request($this->base_url . $url);
         } else {
