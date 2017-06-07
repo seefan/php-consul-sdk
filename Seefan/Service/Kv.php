@@ -12,7 +12,7 @@ class KV extends Service
     {
         $url = $this->name . '/' . $key;
         $resp = $this->http->request($this->base_url . $url, $param);
-        return $this->response($resp, $param['recurse']);
+        return $this->response($resp, empty($param['recurse'])?false:$param['recurse']);
     }
 
     public function delete($key, array $param = array())
