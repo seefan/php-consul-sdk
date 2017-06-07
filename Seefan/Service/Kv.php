@@ -12,7 +12,7 @@ class KV extends Service
     {
         $url = $this->name . '/' . $key;
         $resp = $this->http->request($this->base_url . $url, $param);
-        return $this->response($resp);
+        return $this->response($resp, $param['recurse']);
     }
 
     public function delete($key, array $param = array())
@@ -28,16 +28,16 @@ class KV extends Service
         if (is_array($value) || is_object($value)) {
             $value = json_encode($value);
         }
-        $param['__body']=$value;
+        $param['__body'] = $value;
         $resp = $this->http->request($this->base_url . $url, $param, 'PUT');
         return $resp == 'true';
     }
 
-    public function response($str)
+    public function response($str, $isArray = false)
     {
         $json = parent::response($str);
         if (is_array($json)) {
-            if (count($json) == 1) {
+            if (count($json) == 1 && $isArray == false) {
                 return base64_decode($json[0]['Value']);
             } else {
                 $re = array();
