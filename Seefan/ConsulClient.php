@@ -55,7 +55,7 @@ class ConsulClient
  * 自动注册服务类
  */
 spl_autoload_register(function ($class) {
-    $file = $class . '.php';
+    $file = dirname(__DIR__) . DIRECTORY_SEPARATOR.str_replace("\\", DIRECTORY_SEPARATOR, $class) . '.php';
     if (is_file($file)) {
         require($file);
     }
